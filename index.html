@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para mi amor</title>
+    <style>
+        :root {
+            --color-sobre: #ff4d6d;
+            --color-solapa: #ff758f;
+            --color-papel: #fff5f7;
+            --color-texto: #c9184a;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #ffb3c1;
+            font-family: 'Arial', sans-serif;
+            overflow: hidden;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            cursor: pointer;
+        }
+
+        /* Cuerpo del sobre */
+        .envelope {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: var(--color-sobre);
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+            z-index: 3;
+        }
+
+        /* Solapa del sobre */
+        .envelope::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 4;
+            border-left: 160px solid transparent;
+            border-right: 160px solid transparent;
+            border-top: 110px solid var(--color-solapa);
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        /* Texto frontal */
+        .front-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: bold;
+            font-size: 1.1em;
+            z-index: 5;
+            white-space: nowrap;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        /* La Carta (oculta dentro) */
+        .letter {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 300px;
+            height: 180px;
+            background-color: var(--color-papel);
+            border-radius: 5px;
+            z-index: 2; /* Debajo de la solapa y el sobre inicialmente */
+            transition: transform 0.7s ease-in-out, z-index 0.1s 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            box-sizing: border-box;
+            text-align: center;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .letter p {
+            color: var(--color-texto);
+            font-size: 1rem;
+            line-height: 1.4;
+            margin: 0;
+        }
+
+        /* Animación de apertura */
+        .envelope-wrapper.open .envelope::before {
+            transform: rotateX(180deg);
+            z-index: 1; /* Mueve la solapa detrás al abrirse */
+        }
+
+        .envelope-wrapper.open .letter {
+            transform: translateY(-130px);
+            z-index: 10; /* Sube la carta por encima de todo */
+        }
+
+        .envelope-wrapper.open .front-text {
+            opacity: 0;
+        }
+
+        /* Corazones */
+        .heart {
+            position: absolute;
+            bottom: 0;
+            font-size: 20px;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        @keyframes fly {
+            0% { transform: translateY(0) scale(1); opacity: 1; }
+            100% { transform: translateY(-300px) scale(1.5); opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="envelope-wrapper" id="package" onclick="toggleLetter()">
+    <div class="front-text">Para: El amor de mi vida</div>
+    <div class="envelope"></div>
+    <div class="letter">
+        <p>
+            "Contigo la vida es siempre San Valentín, llena de amor, paz, ternura, risa y de colores. <br><br>
+            <strong>Te amo un mundo, mi vida.</strong>"
+        </p>
+    </div>
+</div>
+
+<script>
+    function toggleLetter() {
+        const pkg = document.getElementById('package');
+        pkg.classList.toggle('open');
+
+        if(pkg.classList.contains('open')) {
+            for (let i = 0; i < 12; i++) {
+                setTimeout(createHeart, i * 100);
+            }
+        }
+    }
+
+    function createHeart() {
+        const heart = document.createElement('div');
+        heart.className = 'heart';
+        heart.innerHTML = '❤️';
+        heart.style.left = Math.random() * 100 + '%';
+        heart.style.animation = `fly ${Math.random() * 2 + 1}s linear forwards`;
+        document.body.appendChild(heart);
+        setTimeout(() => heart.remove(), 2000);
+    }
+</script>
+
+</body>
+</html>
